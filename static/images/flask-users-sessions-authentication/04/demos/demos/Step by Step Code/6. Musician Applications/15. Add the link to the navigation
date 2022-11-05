@@ -1,0 +1,3 @@
+<li class="nav-item {{ 'active' if active_page == 'my_gigs' }}">
+  <a href="{{ url_for('gig.my_gigs') }}" class="nav-link">My gigs</a>
+</li>

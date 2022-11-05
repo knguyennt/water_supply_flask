@@ -1,0 +1,27 @@
+###############################################
+User model properties for activation
+###############################################
+
+activated          = db.Column(db.Boolean(), default=False)
+activation_hash    = db.Column(db.String(255))
+activation_sent_at = db.Column(db.DateTime())
+
+
+###############################################
+Add to init method
+###############################################
+
+
+if role_id == Role.ADMIN:
+        self.activated    = True
+    else:
+        self.activated    = False
+
+
+
+
+
+
+
+def is_active(self):
+    return self.activated

@@ -1,0 +1,4 @@
+class Role:
+    ADMIN    = 1
+    MUSICIAN = 2
+    EMPLOYER = 3

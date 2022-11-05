@@ -1,0 +1,1 @@
+<a href="{{ url_for('account.edit') }}" class="btn btn-primary">Update account</a>

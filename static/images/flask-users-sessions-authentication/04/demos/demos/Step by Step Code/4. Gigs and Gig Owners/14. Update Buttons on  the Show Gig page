@@ -1,0 +1,8 @@
+<div class="button-actions">
+	<a href="{{ url_for('gig.edit', slug=gig.slug) }}" class="btn btn-primary">Update gig</a>
+    <form class="delete-form" method="POST" action="{{ url_for('gig.delete', slug=gig.slug) }}">
+    	<input class="btn btn-danger" type="submit" name="deleteGig"
+    value="Delete gig"
+    onclick="return confirm('Are you sure that you want to permanently delete this gig?')">
+    </form>
+</div>

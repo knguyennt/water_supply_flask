@@ -1,0 +1,5 @@
+<form class="delete-form" method="POST" action="{{ url_for('account.delete') }}">
+              <input class="btn btn-danger" type="submit" name="deleteAccount"
+              value="Delete account"
+              onclick="return confirm('Are you sure that you want to permanently delete your account?')">
+</form>

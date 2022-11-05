@@ -1,0 +1,19 @@
+from app import db
+from werkzeug.utils import escape, unescape
+
+@account.route("/edit", methods=["GET", "POST"])
+@login_required
+def edit():
+	form = UpdateAccountForm()
+
+	if form.validate_on_submit():
+		current_user.location 	 = escape(form.location.data)
+		current_user.description = escape(form.description.data)
+		db.session.add(current_user._get_current_object())
+		db.session.commit()
+		flash("Your account has been updated.", "success")
+		return redirect(url_for("account.show", username=current_user.username))
+
+	form.location.data 	  = unescape(current_user.location)
+	form.description.data = unescape(current_user.description)
+	return render_template("edit_account.html", form=form)

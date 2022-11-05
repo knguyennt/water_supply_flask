@@ -1,0 +1,11 @@
+@auth.route("/activate/<token>")
+@login_required
+def activate_account(token):
+    if current_user.is_active():
+        return redirect(url_for("main.home"))
+    if current_user.activate(token):
+        db.session.commit()
+        flash("Your account is confirmed. Welcome " + current_user.username + "!", "success")
+    else:
+        flash("The confirmation link is not valid or it has expired", "danger")
+    return redirect(url_for("main.home"))

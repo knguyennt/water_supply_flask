@@ -1,0 +1,16 @@
+from app import celery
+from flask import current_app
+
+
+@celery.task
+def send_mail_with_celery(content):
+    msg = create_message(content)
+    mail.send(msg)
+
+
+
+if current_app.config["SEND_MAILS_WITH_CELERY"]:
+        send_mail_with_celery.delay(content)
+    else:
+        msg = create_message(content)
+        mail.send(msg)

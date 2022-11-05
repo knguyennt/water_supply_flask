@@ -1,0 +1,16 @@
+from flask import Blueprint, render_template, flash, url_for, redirect
+from app.auth.views import current_user, login_required, role_required
+
+gig = Blueprint("gig", __name__, template_folder="templates")
+
+
+
+
+
+
+
+#################################
+Register the blueprint in the app/__init__.py
+#################################
+from app.gig.views import gig
+app.register_blueprint(gig, url_prefix="/gig")

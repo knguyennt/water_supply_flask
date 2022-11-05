@@ -1,0 +1,62 @@
+{% if user.is_role(Role.MUSICIAN) %}
+{% set profile_image = "musician.png" %}
+{% endif %}
+{% if user.is_role(Role.EMPLOYER) %}
+{% set profile_image = "employer.png" %}
+{% endif %}
+
+
+
+
+
+
+
+{% if not user.is_admin() %}
+	<img class="profile-image" src="{{ url_for('static', filename='images/' + profile_image) }}">
+{% endif %}
+
+
+
+
+
+<small>
+	{% if user.is_role(Role.MUSICIAN) %}
+	(musician)
+	{% endif %}
+	{% if user.is_role(Role.EMPLOYER) %}
+	(employer)
+	{% endif %}
+	{% if user.is_role(Role.ADMIN) %}
+	(admin)
+	{% endif %}
+</small>
+
+
+
+
+{% if user.is_role(Role.MUSICIAN) and current_user.is_role(Role.EMPLOYER)%}
+<div class="button-actions">
+  <a href="mailto:{{ user.email }}" class="btn btn-success" style="color:white" >Send email</a>
+</div>
+{% endif %}
+
+
+
+################
+This should be added before closing of the "col-lg-10" div in the template
+################
+
+{% if not user.is_admin() %}
+<div class="card card-outline-secondary my-4">
+	<div class="card-header">
+	  {% if user.is_role(Role.MUSICIAN) %}
+	  Gigs this musician is applied to
+	  {% endif %}
+	  {% if user.is_role(Role.EMPLOYER) %}
+	  Gigs posted by this employer
+	  {% endif %}
+	</div>
+	<div class="card-body">
+	</div>
+</div>
+{% endif %}

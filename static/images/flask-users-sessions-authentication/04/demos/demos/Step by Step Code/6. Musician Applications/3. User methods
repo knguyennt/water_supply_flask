@@ -1,0 +1,9 @@
+def is_applied_to(self, gig):
+    if gig is None:
+        return False
+    return self.applied_gigs.filter_by(id=gig.id).first() is not None
+
+def apply(self, gig):
+    if not self.is_applied_to(gig):
+        self.applied_gigs.append(gig)
+        db.session.add(self)

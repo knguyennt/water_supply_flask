@@ -1,0 +1,15 @@
+from flask import request
+
+@gig.route("/apply/<slug>", methods=["POST"])
+@login_required
+@role_required(Role.MUSICIAN)
+def apply_to_gig(slug):
+	gig = Gig.query.filter_by(slug=slug).first()
+	if not gig:
+		abort(404)
+
+	current_user.apply(gig)
+	db.session.commit()
+
+	flash("You just applied to the gig: \"" + gig.title + "\".", "success")
+	return redirect(request.referrer)

@@ -1,0 +1,11 @@
+reset_hash         = db.Column(db.String(255))
+reset_sent_at      = db.Column(db.DateTime())
+
+
+
+
+def create_token_for(self, token_type):
+    setattr(self, token_type + "_token", generate_token())
+    setattr(self, token_type + "_hash", generate_hash(getattr(self, token_type + "_token")))
+    setattr(self, token_type + "_sent_at", datetime.utcnow())
+    db.session.add(self)

@@ -1,0 +1,8 @@
+@gig.route("/info/<slug>")
+@login_required
+def show(slug):
+	gig = Gig.query.filter_by(slug=slug).first()
+	if not gig:
+		abort(404)
+	musicians = gig.musicians.all()
+	return render_template("show_gig.html", gig=gig, musicians=musicians)

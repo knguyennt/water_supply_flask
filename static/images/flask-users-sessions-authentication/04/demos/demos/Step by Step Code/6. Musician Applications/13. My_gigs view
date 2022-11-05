@@ -1,0 +1,10 @@
+@gig.route("/my_gigs")
+@login_required
+def my_gigs():
+	gigs = None
+	if current_user.is_role(Role.MUSICIAN):
+		gigs = current_user.applied_gigs.all()
+	if current_user.is_role(Role.EMPLOYER):
+		gigs = current_user.gigs.all()
+
+	return render_template("my_gigs.html", gigs=gigs)

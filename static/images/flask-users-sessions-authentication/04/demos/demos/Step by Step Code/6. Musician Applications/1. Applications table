@@ -1,0 +1,4 @@
+applications = db.Table("applications",
+    db.Column("gig_id", db.Integer(), db.ForeignKey("gigs.id")),
+    db.Column("musician_id", db.Integer(), db.ForeignKey("users.id"))
+)

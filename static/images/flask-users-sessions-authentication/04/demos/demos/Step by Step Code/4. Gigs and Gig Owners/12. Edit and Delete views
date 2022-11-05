@@ -1,0 +1,34 @@
+@gig.route("/edit/<slug>", methods=["GET", "POST"])
+@login_required
+@role_required(Role.EMPLOYER)
+def edit(slug):
+	form = UpdateGigForm()
+
+	gig = Gig.query.filter_by(slug=slug).first()
+
+	if form.validate_on_submit():
+		gig.title		= escape(form.title.data)
+		gig.description = escape(form.description.data)
+		gig.payment		= form.payment.data
+		gig.location	= escape(form.location.data)
+
+		db.session.add(gig)
+		db.session.commit()
+		flash("The gig is updated.", "success")
+		return redirect(url_for("gig.show", slug=gig.slug))
+
+	form.title.data			= unescape(gig.title)
+	form.description.data 	= unescape(gig.description)
+	form.payment.data		= gig.payment
+	form.location.data		= unescape(gig.location)
+	return render_template("edit_gig.html", gig=gig, form=form)
+
+@gig.route("/delete/<slug>", methods=["POST"])
+@login_required
+@role_required(Role.EMPLOYER)
+def delete(slug):
+	gig = Gig.query.filter_by(slug=slug).first()
+	db.session.delete(gig)
+	db.session.commit()
+	flash("The gig is deleted.", "success")
+	return redirect(url_for("main.home"))

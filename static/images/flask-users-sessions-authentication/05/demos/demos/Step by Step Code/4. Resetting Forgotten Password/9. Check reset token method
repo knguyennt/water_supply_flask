@@ -1,0 +1,5 @@
+def check_reset_token(self, token):
+    minutes_from_sending_reset = (datetime.utcnow() - self.reset_sent_at).total_seconds()/60
+    if _check_token(self.reset_hash, token) and minutes_from_sending_reset < 30:
+        return True
+    return False

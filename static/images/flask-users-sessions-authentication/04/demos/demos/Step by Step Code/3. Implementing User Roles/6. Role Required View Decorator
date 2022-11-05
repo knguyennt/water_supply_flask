@@ -1,0 +1,10 @@
+def role_required(role):
+    def _role_required(f):
+        @wraps(f)
+        def __role_required(*args, **kwargs):
+            if not current_user.is_role(role):
+                flash("You are not authorized to access this page", "danger")
+                return redirect(url_for("main.home"))
+            return f(*args, **kwargs)
+        return __role_required
+    return _role_required

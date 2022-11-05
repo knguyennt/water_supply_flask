@@ -1,0 +1,8 @@
+def activation_required(f):
+    @wraps(f)
+    def _activation_required(*args, **kwargs):
+        if not current_user.is_active():
+            flash("Only activated users have access to that page.", "danger")
+            return redirect(url_for("main.home"))
+        return f(*args, **kwargs)
+    return _activation_required

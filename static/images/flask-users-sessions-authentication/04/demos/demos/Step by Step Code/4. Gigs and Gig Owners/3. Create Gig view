@@ -1,0 +1,24 @@
+from app import db
+from app.models import User, Role, Gig
+from werkzeug.utils import escape, unescape
+
+
+@gig.route("/create", methods=["GET", "POST"])
+@login_required
+@role_required(Role.EMPLOYER)
+def create():
+	form = CreateGigForm()
+
+	if form.validate_on_submit():
+		title		= escape(form.title.data)
+		description = escape(form.description.data)
+		payment		= form.payment.data
+		location	= escape(form.location.data)
+
+		gig = Gig(title, description, payment, location, current_user.id)
+		db.session.add(gig)
+		db.session.commit()
+		flash("The new gig has been added. \""+ gig.title +"\"", "success")
+		return redirect(url_for("main.home"))
+
+	return render_template("create_gig.html", form=form)

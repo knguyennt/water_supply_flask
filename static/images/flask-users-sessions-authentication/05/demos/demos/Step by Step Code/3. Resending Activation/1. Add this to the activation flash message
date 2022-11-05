@@ -1,0 +1,5 @@
+<small>
+Did not get the confirmation email?
+<br>
+<a href="{{ url_for('auth.send_activation') }}">Send it again</a>
+</small>

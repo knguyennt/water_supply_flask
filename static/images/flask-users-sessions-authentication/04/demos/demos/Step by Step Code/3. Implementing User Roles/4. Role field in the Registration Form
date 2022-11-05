@@ -1,0 +1,1 @@
+role             = RadioField("I am *:", coerce=int, choices=[(2, "Musician"),(3, "Employer")]) 

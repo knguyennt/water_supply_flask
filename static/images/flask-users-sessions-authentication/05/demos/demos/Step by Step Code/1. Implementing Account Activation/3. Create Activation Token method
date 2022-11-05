@@ -1,0 +1,8 @@
+from datetime import datetime
+
+def create_activation_token(self):
+    self.activation_token   = generate_token()
+    self.activation_hash    = generate_hash(self.activation_token)
+    self.activation_sent_at = datetime.utcnow()
+    db.session.add(self)
+

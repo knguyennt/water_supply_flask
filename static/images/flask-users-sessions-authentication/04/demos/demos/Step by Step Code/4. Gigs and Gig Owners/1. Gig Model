@@ -1,0 +1,43 @@
+################################
+User model gigs property relationship
+################################
+gigs               = db.relationship("Gig", backref="employer", lazy="dynamic", cascade="all, delete-orphan")
+
+
+
+
+
+from slugify import slugify
+from sqlalchemy import event
+
+class Gig(db.Model):
+    __tablename__ = "gigs"
+
+    id          = db.Column(db.Integer(), primary_key=True)
+    title       = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text())
+    payment     = db.Column(db.Float())
+    location    = db.Column(db.String(255))
+    employer_id = db.Column(db.Integer(), db.ForeignKey("users.id"), index=True, nullable=False)
+    slug        = db.Column(db.String(255), nullable=False, unique=True)
+
+    def __init__(self, title, description, payment, location, employer_id):
+        self.title         = title
+        self.description   = description
+        self.payment       = payment
+        self.location      = location
+        self.employer_id   = employer_id
+
+@event.listens_for(Gig.title, 'set')
+def update_slug(target, value, old_value, initiator):
+    target.slug = slugify(value) + "-" + token_urlsafe(3)
+
+
+
+
+
+#################################
+User model method for gig owners
+#################################
+def is_gig_owner(self, gig):
+    return self.id == gig.employer_id

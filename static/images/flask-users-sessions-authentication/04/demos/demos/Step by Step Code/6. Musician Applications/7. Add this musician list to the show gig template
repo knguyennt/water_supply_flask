@@ -1,0 +1,19 @@
+#####################################
+Add this before the closing tag of the "col-lg-10" div
+#####################################
+
+<div class="card card-outline-secondary my-4">
+  <div class="card-header">
+    Musicians applied to this gig
+  </div>
+  <div class="card-body">
+    {% if musicians %}
+    {% for musician in musicians %}
+    <h4><a href="{{ url_for('account.show', username=musician.username) }}">{{ musician.username }}</a><h4>
+    <hr class="form-border">
+    {% endfor %}
+    {% else %}
+    Nothing to show
+    {% endif %}
+  </div>
+</div>

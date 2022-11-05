@@ -1,0 +1,5 @@
+def is_admin(self):
+	return self.role_id == Role.ADMIN
+
+def is_role(self, role):
+	return self.role_id == role

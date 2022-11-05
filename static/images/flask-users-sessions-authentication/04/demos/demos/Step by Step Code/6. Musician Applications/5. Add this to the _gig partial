@@ -1,0 +1,12 @@
+{% if active_page == 'home' %}
+  {% if current_user.is_role(Role.MUSICIAN) %}
+    <br>
+    {% if current_user.is_applied_to(gig) %}
+     <button class="btn btn-warning" style="color:white;margin-top:10px" disabled>Applied...</button>
+    {% else %}
+    <form method="POST" action="{{ url_for('gig.apply_to_gig', slug=gig.slug) }}">
+      <input type="submit" class="btn btn-warning" style="color:white;margin-top:10px" value="Apply">
+    </form>
+    {% endif %}
+  {% endif %}
+{% endif %}

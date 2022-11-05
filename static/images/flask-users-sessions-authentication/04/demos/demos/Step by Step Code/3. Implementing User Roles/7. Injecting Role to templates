@@ -1,0 +1,5 @@
+from app.models import User, Role
+
+@auth.app_context_processor
+def inject_roles():
+	return dict(Role=Role)

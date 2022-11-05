@@ -1,0 +1,23 @@
+{% if not user.is_admin() %}
+  <div class="card card-outline-secondary my-4">
+    <div class="card-header">
+      {% if user.is_role(Role.MUSICIAN) %}
+      Gigs this musician is applied to
+      {% endif %}
+      {% if user.is_role(Role.EMPLOYER) %}
+      Gigs posted by this employer
+      {% endif %}
+    </div>
+    <div class="card-body">
+      {% if gigs %}
+      {% for gig in gigs %}
+        <h4><a href="{{ url_for('gig.show', slug=gig.slug) }}">{{ gig.title }}</a><h4>
+        <small>{{ gig.description }}</small>
+        <hr class="form-border">
+        {% endfor %}
+      {% else %}
+      Nothing to show
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

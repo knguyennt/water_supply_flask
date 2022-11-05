@@ -1,0 +1,13 @@
+from functools import wraps
+
+gig = Blueprint("gig", __name__, template_folder="templates")
+
+def gig_owner_required(f):
+	@wraps(f)
+	def _gig_owner_required(*args, **kwargs):
+		gig = Gig.query.filter_by(slug=request.view_args["slug"]).first()
+		if not gig or not current_user.is_gig_owner(gig):
+			flash("You are not the owner of that gig.", "danger")
+			return redirect(url_for("main.home"))
+		return f(*args, **kwargs)
+	return _gig_owner_required

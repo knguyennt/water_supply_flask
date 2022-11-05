@@ -1,0 +1,1 @@
+role_id            = db.Column(db.Integer(), default=0)
