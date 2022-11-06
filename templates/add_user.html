@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1> This is a add_user page </h1>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    {{ form.email.label}}
+    {{ form.email() }}
+
+    <br>
+    {{ form.name.label }}
+    {{ form.name() }}
+    <br>
+
+    {{ form.employee_id.label}}
+    {{ form.employee_id() }}
+
+    <br>
+    {{ form.submit() }}
+
+</form>
+
+
+{% endblock %}
