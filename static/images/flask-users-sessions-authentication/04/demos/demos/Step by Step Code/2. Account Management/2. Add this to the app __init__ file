@@ -1,3 +1,0 @@
-from app.account.views import account
-
-app.register_blueprint(account, url_prefix="/user")

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Mã Van : Something</h1>
+    <h2>Địa chỉ nhà</h2>
+    <form method="post">
+        <div class="hstack gap-2">
+            {{ form.hidden_tag() }}
+            <div class="vstack gap-3">
+                <div>
+                    {{ form.vault_diameter.label(class="form_label") }}
+                    {{ form.vault_diameter() }}
+                </div>
+                <div>
+                    {{ form.vault_model.label(class="form_label") }}
+                    {{ form.vault_model() }}
+                </div>
+                <div>
+                    {{ form.vault_serial.label(class="form_label") }}
+                    {{ form.vault_serial() }}
+                </div>
+                <div>
+                    {{ form.vault_manafacture.label(class="form_label") }}
+                    {{ form.vault_manafacture() }}
+                </div>
+                <div>
+                    {{ form.vault_close_rotation.label(class="form_label") }}
+                    {{ form.vault_close_rotation() }}
+                </div>
+                <div>
+                    {{ form.vault_key_size.label(class="form_label") }}
+                    {{ form.vault_key_size() }}
+                </div>
+                <div>
+                    {{ form.vault_total_rotation.label(class="form_label") }}
+                    {{ form.vault_total_rotation() }}
+                </div>
+            </div>
+
+            <div class="vr"></div>
+
+            <div class="vstack gap-3">
+                <div>
+                    {{ form.vault_current_rotation.label(class="form_label") }}
+                    {{ form.vault_current_rotation() }}
+                </div>
+                <div>
+                    {{ form.vault_state.label(class="form_label") }}
+                    {{ form.vault_state() }}
+                </div>
+                <div>
+                    {{ form.vault_function.label(class="form_label") }}
+                    {% for subfield in form.vault_function %}
+                        <tr>
+                            <td>{{ subfield }}</td>
+                            <td>{{ subfield.label }}</td>
+                        </tr>
+                    {% endfor %}
+                </div>
+                <div>
+                    {{ form.vault_status.label(class="form_label") }}
+                    {{ form.vault_status() }}
+                </div>
+                <div>
+                    {{ form.vault_position.label(class="form_label") }}
+                    {{ form.vault_position() }}
+                </div>
+            </div>
+        </div>
+        <div class="vault_detail_submit">
+            <div class="hstack gap-2" style="float: right;">
+                {{ form.close_button() }}
+                <div class="vr"></div>
+                {{ form.update_button() }}
+            </div>
+        <div>
+    </form>
+
+
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/vault_detail.css') }}">
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+{% endblock %}

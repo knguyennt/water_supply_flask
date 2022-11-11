@@ -1,7 +1,0 @@
-<div class="form-group">
-	{{ form.role.label }}<br>
-	{% for item in form.role %}
-	  {{ item }} {{ item.label }}<br>
-	{% endfor %}
-	{{ field_error_messages(form.role) }}
-</div>

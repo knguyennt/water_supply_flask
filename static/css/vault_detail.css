@@ -1,0 +1,12 @@
+.form_label {
+    width: 150px;
+}
+
+.vault_detail_submit {
+    padding-top: 10px;
+    width: 70%;
+}
+
+body {
+    background-color: gainsboro;
+}
