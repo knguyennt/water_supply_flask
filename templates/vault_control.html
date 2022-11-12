@@ -35,15 +35,15 @@
             </tr>
           </thead>
           <tbody>
-            {% for element in test_data %}
+            {% for element in vault_filter %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td> {{ element["vault_id"] }} </td>
-                <td> {{ element["vault_position"] }} </td>
-                <td> {{ element["vault_operate_date"] }} </td>
-                <td> {{ element["vault_status"] }} </td>
-                <td> {{ element["vault_description"] }} </td>
-                <td><a href="{{url_for('vault_detail', vault_id=element['vault_id'])}}"> Cập Nhật </a></td>
+                <td> {{ element.id }} </td>
+                <td> {{ element.position }} </td>
+                <td> {{ element.vault_operation_date }} </td>
+                <td> {{ element.status }} </td>
+                <td> {{ element.description }} </td>
+                <td><a href="{{url_for('vault_detail', vault_id=element.id)}}"> Cập Nhật </a></td>
               </tr>
             {% endfor %}
           </tbody>

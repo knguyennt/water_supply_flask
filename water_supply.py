@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy_filters import apply_filters
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, EmailField, SubmitField, DateField, SelectField, RadioField
 from wtforms.validators import DataRequired
@@ -73,6 +74,8 @@ class VaultDetail(db.Model):
     function = db.Column(db.String(20))
     status = db.Column(db.String(20))
     position = db.Column(db.String(20))
+    vault_operation_date = db.Column(db.Date)
+    description = db.Column(db.Text)
 
 @app.route("/add_user", methods=["POST", "GET"])
 def add_user():
@@ -105,14 +108,29 @@ def login():
 def welcome():
     return "Welcome to the first page"
 
-@app.route("/vault_control")
+@app.route("/vault_control", methods=["GET", "POST"])
 def vault_control():
     form = VaultForm()
-    if form.validate_on_submit():
-        pass
-    return render_template("vault_control.html", form=form)
+    field_map = {
+        'vault_id': 'id',
+        'vault_position': 'position'
+    }
+    if form.is_submitted():
+        filter_dict = dict()
+        for field_name, data in form.data.items():
+            if data and field_name != "submit" and field_name != "csrf_token" and field_name != "end_date" and field_name != "start_date":
+                filter_dict[field_map[field_name]] = data
+        vault_filter = VaultDetail.query.filter_by(**filter_dict).all()
+        if form.start_date.data:
+            if form.end_date.data:
+                vault_filter = VaultDetail.query.filter_by(**filter_dict).filter(VaultDetail.vault_operation_date >= form.start_date.data).filter(VaultDetail.vault_operation_date <= form.start_date.data)
+            else:
+                vault_filter = VaultDetail.query.filter_by(**filter_dict).filter_by(vault_operation_date = form.start_date.data)
+    else:
+        vault_filter = VaultDetail.query.all()
+    return render_template("vault_control.html", form=form, vault_filter=vault_filter)
 
-@app.route("/vault_detail/<int:vault_id>")
+@app.route("/vault_detail/<string:vault_id>")
 def vault_detail(vault_id):
     vault_detail_form = VaultDetailModifyForm()
     return render_template("vault_detail.html", vault_id=vault_id, form=vault_detail_form)
