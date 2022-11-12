@@ -28,6 +28,7 @@ class VaultForm(FlaskForm):
 
 
 class VaultDetailModifyForm(FlaskForm):
+    vault_id = StringField("Mã Van")
     vault_diameter = IntegerField("Đường kính")
     vault_model = StringField("Model")
     vault_serial = StringField("Số serial")
@@ -54,11 +55,24 @@ class Users(db.Model):
     email = db.Column(db.String(200), primary_key=True)
     name = db.Column(db.String(200))
 
-
-
     # Create a string
     def __repr__(self):
         return '<Name %r>' % self.name
+
+class VaultDetail(db.Model):
+    id = db.Column(db.String(20), primary_key=True)
+    diameter = db.Column(db.Integer)
+    model = db.Column(db.String(20))
+    serial = db.Column(db.String(20))
+    manafacture = db.Column(db.String(20))
+    close_rotation = db.Column(db.String(20))
+    key_size = db.Column(db.String(10))
+    total_rotation = db.Column(db.Integer)
+    current_rotation = db.Column(db.Integer)
+    state = db.Column(db.String(20))
+    function = db.Column(db.String(20))
+    status = db.Column(db.String(20))
+    position = db.Column(db.String(20))
 
 @app.route("/add_user", methods=["POST", "GET"])
 def add_user():
