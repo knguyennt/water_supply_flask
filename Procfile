@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn app:water_supply
