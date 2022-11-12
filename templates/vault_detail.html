@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Mã Van : Something</h1>
+    <h1>Mã Van : {{ vault_detail.id }}</h1>
     <h2>Địa chỉ nhà</h2>
     <form method="post">
         <div class="hstack gap-2">
@@ -69,7 +69,7 @@
         </div>
         <div class="vault_detail_submit">
             <div class="hstack gap-2" style="float: right;">
-                {{ form.close_button() }}
+                <button><a href="{{ url_for('vault_control') }}">Close</a></button>
                 <div class="vr"></div>
                 {{ form.update_button() }}
             </div>

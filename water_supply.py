@@ -39,9 +39,9 @@ class VaultDetailModifyForm(FlaskForm):
     vault_total_rotation = IntegerField("Tổng số vòng van")
     vault_current_rotation = IntegerField("Số vòng")
     vault_state = SelectField("Trạng thái", choices=["Đóng", "Mở"])
-    vault_function = RadioField("Chức năng hiện tại", choices=[('M','Male'),('F','Female')])
-    vault_status = SelectField("Tình trạng")
-    vault_position = SelectField("Vị trí van")
+    vault_function = RadioField("Chức năng hiện tại", choices=[('v_bien','Van Biên'),('v_buoc','Van Bước'), ('v_tuanhoan', 'Van Tuần Hoàn')])
+    vault_status = SelectField("Tình trạng", choices=["Hư", "Bình Thường"])
+    vault_position = SelectField("Vị trí van", choices=["Dưới Nhựa"])
     close_button = SubmitField("Close")
     update_button = SubmitField("Update")
 
@@ -130,10 +130,54 @@ def vault_control():
         vault_filter = VaultDetail.query.all()
     return render_template("vault_control.html", form=form, vault_filter=vault_filter)
 
-@app.route("/vault_detail/<string:vault_id>")
+
+@app.route("/vault_detail/<string:vault_id>", methods=["GET", "POST"])
 def vault_detail(vault_id):
+    function_dict = {
+        "Van Biên" : "v_bien",
+        "Van Bước": "v_buoc",
+        "Van Tuần Hoàn": "v_tuanhoan"
+    }
+    reverse_function_dict = {
+        "v_bien" : "Van Biên",
+        "v_buoc": "Van Bước",
+        "v_tuanhoan": "Van Tuần Hoàn"
+    }
     vault_detail_form = VaultDetailModifyForm()
-    return render_template("vault_detail.html", vault_id=vault_id, form=vault_detail_form)
+    vault_detail = VaultDetail.query.filter_by(id=vault_id).first()
+    if vault_detail_form.validate_on_submit():
+        print(vault_detail_form.vault_function.data)
+        vault_detail.diameter = vault_detail_form.vault_diameter.data
+        vault_detail.model = vault_detail_form.vault_model.data
+        vault_detail.serial = vault_detail_form.vault_serial.data
+        vault_detail.manafacture = vault_detail_form.vault_manafacture.data
+        vault_detail.close_rotation = vault_detail_form.vault_close_rotation.data
+        vault_detail.key_size = vault_detail_form.vault_key_size.data
+        vault_detail.total_rotation = vault_detail_form.vault_total_rotation.data
+        vault_detail.current_rotation = vault_detail_form.vault_current_rotation.data
+        vault_detail.state = vault_detail_form.vault_state.data
+        vault_detail.function = reverse_function_dict[vault_detail_form.vault_function.data]
+        vault_detail.status = vault_detail_form.vault_status.data
+        vault_detail.position = vault_detail_form.vault_position.data
+        db.session.commit()
+
+    # add default value here
+    vault_detail_form.vault_id.default = vault_detail.id
+    vault_detail_form.vault_diameter.default = vault_detail.diameter
+    vault_detail_form.vault_model.default = vault_detail.model
+    vault_detail_form.vault_serial.default = vault_detail.serial
+    vault_detail_form.vault_manafacture.default = vault_detail.manafacture
+    vault_detail_form.vault_close_rotation.default = vault_detail.close_rotation
+    vault_detail_form.vault_key_size.default = vault_detail.key_size
+    vault_detail_form.vault_total_rotation.default = vault_detail.total_rotation
+    vault_detail_form.vault_current_rotation.default = vault_detail.current_rotation
+    vault_detail_form.vault_state.default = vault_detail.state
+    vault_detail_form.vault_function.default = function_dict[vault_detail.function]
+    vault_detail_form.vault_status.default = vault_detail.status
+    vault_detail_form.vault_position.default = vault_detail.position
+    vault_detail_form.process()
+    # end adding default value
+    return render_template("vault_detail.html", vault_id=vault_id, form=vault_detail_form, vault_detail=vault_detail)
 
 @app.route("/signin", methods=[])
 def signin():
