@@ -6,6 +6,7 @@ from wtforms import StringField, IntegerField, EmailField, SubmitField, DateFiel
 from wtforms.validators import DataRequired
 from datetime import datetime
 from flask_login import UserMixin
+from util import read_data
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -42,7 +43,6 @@ class VaultDetailModifyForm(FlaskForm):
     vault_function = RadioField("Chức năng hiện tại", choices=[('v_bien','Van Biên'),('v_buoc','Van Bước'), ('v_tuanhoan', 'Van Tuần Hoàn')])
     vault_status = SelectField("Tình trạng", choices=["Hư", "Bình Thường"])
     vault_position = SelectField("Vị trí van", choices=["Dưới Nhựa"])
-    close_button = SubmitField("Close")
     update_button = SubmitField("Update")
 
 
@@ -60,6 +60,14 @@ class Users(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.name
 
+class WardTable(db.Model):
+    city_name = db.Column(db.String(50))
+    ward_name = db.Column(db.String(50), primary_key=True)
+
+class DistrictTable(db.Model):
+    city_name = db.Column(db.String(50))
+    district_name = db.Column(db.String(50), primary_key=True)
+
 class VaultDetail(db.Model):
     id = db.Column(db.String(20), primary_key=True)
     diameter = db.Column(db.Integer)
@@ -76,6 +84,10 @@ class VaultDetail(db.Model):
     position = db.Column(db.String(20))
     vault_operation_date = db.Column(db.Date)
     description = db.Column(db.Text)
+    cooperate_team = db.Column(db.String(100))
+    district = db.Column(db.String(30), db.ForeignKey("district_table.district_name"))
+    ward = db.Column(db.String(100), db.ForeignKey("ward_table.ward_name"))
+    address = db.Column(db.Text)
 
 @app.route("/add_user", methods=["POST", "GET"])
 def add_user():
