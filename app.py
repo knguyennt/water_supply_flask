@@ -31,7 +31,7 @@ class VaultDetailModifyForm(FlaskForm):
     vault_total_round = IntegerField("Tổng số vòng")
     vault_current_round = IntegerField("Vòng mở")
     vault_status = SelectField("Trạng thái", choices=["Đóng", "Mở"])
-    vault_type = RadioField("Chức năng hiện tại", choices=[('bien','Biên'),('buoc','Bước'), ('tong', 'Tổng')])
+    vault_type = RadioField("Chức năng hiện tại", choices=[('Biên','Biên'),('Bước','Bước'), ('Tổng', 'Tổng')])
     vault_position = SelectField("Vị trí van", choices=["Dưới Nhựa", "Trên Lề"])
     vault_address = StringField("Địa chỉ")
     vault_cooperate_team = StringField("Đơn vị phối hợp")
@@ -143,16 +143,7 @@ def vault_control():
 
 @app.route("/vault_detail/<string:vault_id>", methods=["GET", "POST"])
 def vault_detail(vault_id):
-    function_dict = {
-        "Van Biên" : "v_bien",
-        "Van Bước": "v_buoc",
-        "Van Tuần Hoàn": "v_tuanhoan"
-    }
-    reverse_function_dict = {
-        "v_bien" : "Van Biên",
-        "v_buoc": "Van Bước",
-        "v_tuanhoan": "Van Tuần Hoàn"
-    }
+    
     vault_detail_form = VaultDetailModifyForm()
     vault_detail = VaultDetail.query.filter_by(vault_id=vault_id).first()
     if vault_detail_form.validate_on_submit():
