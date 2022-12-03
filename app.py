@@ -1,9 +1,9 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_filters import apply_filters
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, EmailField, SubmitField, DateField, SelectField, RadioField
 from wtforms.validators import DataRequired
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -45,6 +45,10 @@ class NamerForm(FlaskForm):
     name = StringField("label for name", validators=[DataRequired()])
     submit = SubmitField("Submit label")
 
+class AffectedAddressForm(FlaskForm):
+    vault_id = StringField("Tra cứu danh bạ ảnh hưởng với mã van")
+    submit = SubmitField("Submit")
+
 # create model for database
 class Users(db.Model):
     email = db.Column(db.String(200), primary_key=True)
@@ -83,6 +87,9 @@ class Conductor(db.Model):
 class Requirer(db.Model):
     requirer_name = db.Column(db.String(50), primary_key=True)
 
+# class affected_address(db.Model):
+#     vault_address = db.Column(db.String(50), primary_key=True)
+#     vault_id = db.Column(db.String(20))
 
 class VaultDetail(db.Model):
     vault_id = db.Column(db.String(20), primary_key=True)
@@ -122,8 +129,8 @@ def welcome():
 def vault_control():
     form = VaultForm()
     field_map = {
-        'vault_id': 'id',
-        'vault_position': 'position'
+        'vault_id': 'vault_id',
+        'vault_position': 'vault_address'
     }
     if form.is_submitted():
         filter_dict = dict()
@@ -143,7 +150,7 @@ def vault_control():
 
 @app.route("/vault_detail/<string:vault_id>", methods=["GET", "POST"])
 def vault_detail(vault_id):
-    
+
     vault_detail_form = VaultDetailModifyForm()
     vault_detail = VaultDetail.query.filter_by(vault_id=vault_id).first()
     if vault_detail_form.validate_on_submit():
@@ -177,6 +184,20 @@ def vault_detail(vault_id):
     vault_detail_form.process()
     # end adding default value
     return render_template("vault_detail.html", vault_id=vault_id, form=vault_detail_form, vault_detail=vault_detail)
+
+@app.route("/vault_report", methods=["GET", "POST"])
+def vault_report():
+    form = AffectedAddressForm()
+    affected_address_filter = None
+
+    affected_filter = VaultDetail.query.filter(VaultDetail.vault_status == "Đóng").with_entities(VaultDetail.vault_id, VaultDetail.vault_address)
+    affected_address = [(id, address) for id, address in affected_filter]
+    
+    if form.is_submitted():
+        search_affected_address_filter = VaultDetail.query.filter(VaultDetail.vault_id==form.vault_id.data.strip()).with_entities(VaultDetail.vault_address)
+        affected_address_filter = [address[0] for address in search_affected_address_filter]
+
+    return render_template("vault_report.html", affected_address=affected_address, form=form, affected_address_filter=affected_address_filter)
 
 @app.route("/signin", methods=[])
 def signin():

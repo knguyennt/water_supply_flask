@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Danh bạ ảnh hưởng</h1>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Mã van đang đóng</th>
+        <th scope="col">Danh bạ đang bị ảnh hưởng</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for vault in affected_address %}
+            <tr>
+                <td>{{ vault[0] }}</td>
+                <td>{{ vault[1] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+
+<h1>Tra cứu danh bạ ảnh hưởng</h1>
+<form method="post" style="padding-top: 10px;">
+    {{ form.hidden_tag() }}
+
+    {{ form.vault_id.label() }}
+    {{ form.vault_id() }}
+
+    {{ form.submit() }}
+  
+  </form>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Danh bạ sẽ bị ảnh hưởng</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% if affected_address_filter %}
+            {% for vault in affected_address_filter %}
+                <tr>
+                    <td>{{ vault }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+  </table>
+
+{% endblock %}
