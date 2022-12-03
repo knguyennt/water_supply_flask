@@ -10,12 +10,6 @@
     {{ form.vault_position.label() }}
     {{ form.vault_position() }}
 
-    {{ form.start_date.label() }}
-    {{ form.start_date() }}
-
-    {{ form.end_date.label() }}
-    {{ form.end_date() }}
-
     {{ form.submit() }}
   
   </form>
@@ -28,9 +22,7 @@
               <th scope="col">#</th>
               <th scope="col">Mã van</th>
               <th scope="col">Vị trí</th>
-              <th scope="col">Ngày vận hành</th>
               <th scope="col">Trạng thái</th>
-              <th scope="col">Nội dung</th>
               <th scope="col">Cập nhật</th>
             </tr>
           </thead>
@@ -38,12 +30,10 @@
             {% for element in vault_filter %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td> {{ element.id }} </td>
-                <td> {{ element.position }} </td>
-                <td> {{ element.vault_operation_date }} </td>
-                <td> {{ element.status }} </td>
-                <td> {{ element.description }} </td>
-                <td><a href="{{url_for('vault_detail', vault_id=element.id)}}"> Cập Nhật </a></td>
+                <td> {{ element.vault_id }} </td>
+                <td> {{ element.vault_address }} </td>
+                <td>{{ element.vault_status }}</td>
+                <td><a href="{{url_for('vault_detail', vault_id=element.vault_id)}}"> Cập Nhật </a></td>
               </tr>
             {% endfor %}
           </tbody>

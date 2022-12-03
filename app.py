@@ -4,16 +4,11 @@ from sqlalchemy_filters import apply_filters
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, EmailField, SubmitField, DateField, SelectField, RadioField
 from wtforms.validators import DataRequired
-from datetime import datetime
-from flask_login import UserMixin
-from util import read_data
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey' # csrf
 db = SQLAlchemy(app) # start db_session at app runtime
-
-# app.app_context().push()
 
 class UserForm(FlaskForm):
     email = EmailField("User email")
@@ -31,18 +26,17 @@ class VaultForm(FlaskForm):
 
 class VaultDetailModifyForm(FlaskForm):
     vault_id = StringField("Mã Van")
-    vault_diameter = IntegerField("Đường kính")
-    vault_model = StringField("Model")
-    vault_serial = StringField("Số serial")
-    vault_manafacture = StringField("Nhà sản xuất")
-    vault_close_rotation = StringField("Chiều đóng van")
-    vault_key_size = StringField("Cỡ chìa khóa")
-    vault_total_rotation = IntegerField("Tổng số vòng van")
-    vault_current_rotation = IntegerField("Số vòng")
-    vault_state = SelectField("Trạng thái", choices=["Đóng", "Mở"])
-    vault_function = RadioField("Chức năng hiện tại", choices=[('v_bien','Van Biên'),('v_buoc','Van Bước'), ('v_tuanhoan', 'Van Tuần Hoàn')])
-    vault_status = SelectField("Tình trạng", choices=["Hư", "Bình Thường"])
-    vault_position = SelectField("Vị trí van", choices=["Dưới Nhựa"])
+    vault_size = IntegerField("Cỡ Van")
+    vault_dma = StringField("DMA")
+    vault_total_round = IntegerField("Tổng số vòng")
+    vault_current_round = IntegerField("Vòng mở")
+    vault_status = SelectField("Trạng thái", choices=["Đóng", "Mở"])
+    vault_type = RadioField("Chức năng hiện tại", choices=[('bien','Biên'),('buoc','Bước'), ('tong', 'Tổng')])
+    vault_position = SelectField("Vị trí van", choices=["Dưới Nhựa", "Trên Lề"])
+    vault_address = StringField("Địa chỉ")
+    vault_cooperate_team = StringField("Đơn vị phối hợp")
+    vault_conductor = StringField("Người thực hiện")
+    vault_requirer = StringField("Người đề xuất")
     update_button = SubmitField("Update")
 
 
@@ -68,39 +62,43 @@ class DistrictTable(db.Model):
     city_name = db.Column(db.String(50))
     district_name = db.Column(db.String(50), primary_key=True)
 
+class VaultPosition(db.Model):
+    vault_position = db.Column(db.String(20), primary_key=True)
+
+class VaultDMA(db.Model):
+    vault_dma = db.Column(db.String(20), primary_key=True)
+
+class VaultType(db.Model):
+    vault_type = db.Column(db.String(20), primary_key=True)
+
+class CooperateTeam(db.Model):
+    team_name = db.Column(db.String(50), primary_key=True)
+
+class VaultStatus(db.Model):
+    vault_status = db.Column(db.String(20), primary_key=True)
+
+class Conductor(db.Model):
+    conductor = db.Column(db.String(50),primary_key=True)
+
+class Requirer(db.Model):
+    requirer_name = db.Column(db.String(50), primary_key=True)
+
+
 class VaultDetail(db.Model):
-    id = db.Column(db.String(20), primary_key=True)
-    diameter = db.Column(db.Integer)
-    model = db.Column(db.String(20))
-    serial = db.Column(db.String(20))
-    manafacture = db.Column(db.String(20))
-    close_rotation = db.Column(db.String(20))
-    key_size = db.Column(db.String(10))
-    total_rotation = db.Column(db.Integer)
-    current_rotation = db.Column(db.Integer)
-    state = db.Column(db.String(20))
-    function = db.Column(db.String(20))
-    status = db.Column(db.String(20))
-    position = db.Column(db.String(20))
-    vault_operation_date = db.Column(db.Date)
-    description = db.Column(db.Text)
-    cooperate_team = db.Column(db.String(100))
-    district = db.Column(db.String(30), db.ForeignKey("district_table.district_name"))
-    ward = db.Column(db.String(100), db.ForeignKey("ward_table.ward_name"))
-    address = db.Column(db.Text)
+    vault_id = db.Column(db.String(20), primary_key=True)
+    vault_dma = db.Column(db.String(20), db.ForeignKey(VaultDMA.vault_dma))
+    vault_size = db.Column(db.Integer)
+    vault_type = db.Column(db.String(20), db.ForeignKey("vault_type.vault_type")) # Chức năng van
+    vault_position = db.Column(db.String(20), db.ForeignKey("vault_position.vault_position")) # Trên lề, dưới nhựa
+    vault_total_round = db.Column(db.Integer) # Tổng số vòng van
+    vault_current_round = db.Column(db.Integer) # Vòng van hiện tại
+    vault_address = db.Column(db.String(50))
+    vault_cooperate_team = db.Column(db.String(20), db.ForeignKey("cooperate_team.team_name")) # Đơn vị phối hợp
+    vault_conductor = db.Column(db.String(20), db.ForeignKey(Conductor.conductor)) # Người thực hiện
+    vault_requirer = db.Column(db.String(20), db.ForeignKey(Requirer.requirer_name)) # người đề xuất
+    vault_status = db.Column(db.String(20), db.ForeignKey(VaultStatus.vault_status))
 
-@app.route("/add_user", methods=["POST", "GET"])
-def add_user():
-    form = UserForm()
-    if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data, name=form.name.data).first()
-        if user is None:
-            new_user = Users(name=form.name.data, email=form.email.data)
-            db.session.add(new_user)
-            db.session.commit()
-    return render_template('add_user.html', form=form)
 
-    
 @app.route('/name', methods=["POST", "GET"])
 def name():
     form = NamerForm()
@@ -156,37 +154,35 @@ def vault_detail(vault_id):
         "v_tuanhoan": "Van Tuần Hoàn"
     }
     vault_detail_form = VaultDetailModifyForm()
-    vault_detail = VaultDetail.query.filter_by(id=vault_id).first()
+    vault_detail = VaultDetail.query.filter_by(vault_id=vault_id).first()
     if vault_detail_form.validate_on_submit():
-        print(vault_detail_form.vault_function.data)
-        vault_detail.diameter = vault_detail_form.vault_diameter.data
-        vault_detail.model = vault_detail_form.vault_model.data
-        vault_detail.serial = vault_detail_form.vault_serial.data
-        vault_detail.manafacture = vault_detail_form.vault_manafacture.data
-        vault_detail.close_rotation = vault_detail_form.vault_close_rotation.data
-        vault_detail.key_size = vault_detail_form.vault_key_size.data
-        vault_detail.total_rotation = vault_detail_form.vault_total_rotation.data
-        vault_detail.current_rotation = vault_detail_form.vault_current_rotation.data
-        vault_detail.state = vault_detail_form.vault_state.data
-        vault_detail.function = reverse_function_dict[vault_detail_form.vault_function.data]
-        vault_detail.status = vault_detail_form.vault_status.data
-        vault_detail.position = vault_detail_form.vault_position.data
+        vault_detail.vault_id = vault_detail_form.vault_id.data
+        vault_detail.vault_dma = vault_detail_form.vault_dma.data
+        vault_detail.vault_size = vault_detail_form.vault_size.data
+        vault_detail.vault_type = vault_detail_form.vault_type.data
+        vault_detail.vault_position = vault_detail_form.vault_position.data
+        vault_detail.vault_total_round = vault_detail_form.vault_total_round.data
+        vault_detail.vault_current_round = vault_detail_form.vault_current_round.data
+        vault_detail.vault_address = vault_detail_form.vault_address.data
+        vault_detail.vault_cooperate_team = vault_detail_form.vault_cooperate_team.data
+        vault_detail.vault_conductor = vault_detail_form.vault_conductor.data
+        vault_detail.vault_requirer = vault_detail_form.vault_requirer.data
+        vault_detail.vault_status = vault_detail_form.vault_status.data
         db.session.commit()
 
     # add default value here
-    vault_detail_form.vault_id.default = vault_detail.id
-    vault_detail_form.vault_diameter.default = vault_detail.diameter
-    vault_detail_form.vault_model.default = vault_detail.model
-    vault_detail_form.vault_serial.default = vault_detail.serial
-    vault_detail_form.vault_manafacture.default = vault_detail.manafacture
-    vault_detail_form.vault_close_rotation.default = vault_detail.close_rotation
-    vault_detail_form.vault_key_size.default = vault_detail.key_size
-    vault_detail_form.vault_total_rotation.default = vault_detail.total_rotation
-    vault_detail_form.vault_current_rotation.default = vault_detail.current_rotation
-    vault_detail_form.vault_state.default = vault_detail.state
-    vault_detail_form.vault_function.default = function_dict[vault_detail.function]
-    vault_detail_form.vault_status.default = vault_detail.status
-    vault_detail_form.vault_position.default = vault_detail.position
+    vault_detail_form.vault_id.default = vault_detail.vault_id
+    vault_detail_form.vault_dma.default = vault_detail.vault_dma
+    vault_detail_form.vault_size.default = vault_detail.vault_size
+    vault_detail_form.vault_type.default = vault_detail.vault_type
+    vault_detail_form.vault_position.default = vault_detail.vault_position
+    vault_detail_form.vault_total_round.default = vault_detail.vault_total_round
+    vault_detail_form.vault_current_round.default = vault_detail.vault_current_round
+    vault_detail_form.vault_address.default = vault_detail.vault_address
+    vault_detail_form.vault_cooperate_team.default = vault_detail.vault_cooperate_team
+    vault_detail_form.vault_conductor.default = vault_detail.vault_conductor
+    vault_detail_form.vault_requirer.default = vault_detail.vault_requirer
+    vault_detail_form.vault_status.default = vault_detail.vault_status
     vault_detail_form.process()
     # end adding default value
     return render_template("vault_detail.html", vault_id=vault_id, form=vault_detail_form, vault_detail=vault_detail)
