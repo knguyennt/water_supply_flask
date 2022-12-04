@@ -119,7 +119,7 @@ def name():
 @app.route("/", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
-        return redirect(url_for("vault_control"))
+        return redirect(url_for("dashboard"))
     return render_template("user_login.html")
 
 @app.route("/welcome")
@@ -220,8 +220,8 @@ def dashboard():
     total_open_address = VaultDetail.query.filter(VaultDetail.vault_status=="Mở").group_by(VaultDetail.vault_address).count()
     total_open_plt = VaultDetail.query.filter(VaultDetail.vault_status=="Mở", VaultDetail.vault_dma == "QBT_PLC").group_by(VaultDetail.vault_dma).count()
     total_close_plt = VaultDetail.query.filter(VaultDetail.vault_status=="Đóng", VaultDetail.vault_dma == "QBT_PLC").group_by(VaultDetail.vault_dma).count()
-    total_open_ala = VaultDetail.query.filter(VaultDetail.vault_status=="Mở", VaultDetail.vault_dma == "QBT_ALA04").group_by(VaultDetail.vault_dma).count()
-    total_close_ala = VaultDetail.query.filter(VaultDetail.vault_status=="Đóng", VaultDetail.vault_dma == "QBT_ALA04").group_by(VaultDetail.vault_dma).count()
+    total_open_ala = VaultDetail.query.filter(VaultDetail.vault_status=="Mở", VaultDetail.vault_dma == "QBT_AL04").group_by(VaultDetail.vault_dma).count()
+    total_close_ala = VaultDetail.query.filter(VaultDetail.vault_status=="Đóng", VaultDetail.vault_dma == "QBT_AL04").group_by(VaultDetail.vault_dma).count()
 
     num_vault = [total_close_vault, total_open_vault, total_close_address, total_open_address, total_open_plt, total_close_plt, total_open_ala, total_close_ala]
 
