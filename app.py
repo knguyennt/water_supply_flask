@@ -100,6 +100,8 @@ class VaultDetail(db.Model):
     vault_total_round = db.Column(db.Integer) # Tổng số vòng van
     vault_current_round = db.Column(db.Integer) # Vòng van hiện tại
     vault_address = db.Column(db.String(50))
+    vault_client = db.Column(db.String(20))
+    vault_directorhy = db.Column(db.String(20))
     vault_cooperate_team = db.Column(db.String(20), db.ForeignKey("cooperate_team.team_name")) # Đơn vị phối hợp
     vault_conductor = db.Column(db.String(20), db.ForeignKey(Conductor.conductor)) # Người thực hiện
     vault_requirer = db.Column(db.String(20), db.ForeignKey(Requirer.requirer_name)) # người đề xuất
