@@ -207,12 +207,12 @@ def vault_report():
     form = AffectedAddressForm()
     affected_address_filter = None
 
-    affected_filter = VaultDetail.query.filter(VaultDetail.vault_status == "Đóng").with_entities(VaultDetail.vault_id, VaultDetail.vault_address)
-    affected_address = [(id, address) for id, address in affected_filter]
+    affected_filter = VaultDetail.query.filter(VaultDetail.vault_status == "Đóng").with_entities(VaultDetail.vault_id, VaultDetail.vault_address, VaultDetail.vault_directory)
+    affected_address = [(id, address, status) for id, address, status in affected_filter]
     
     if form.is_submitted():
-        search_affected_address_filter = VaultDetail.query.filter(VaultDetail.vault_id==form.vault_id.data.strip()).with_entities(VaultDetail.vault_address)
-        affected_address_filter = [address[0] for address in search_affected_address_filter]
+        search_affected_address_filter = VaultDetail.query.filter(VaultDetail.vault_id==form.vault_id.data.strip()).with_entities(VaultDetail.vault_address, VaultDetail.vault_directory)
+        affected_address_filter = [(address, directory) for address, directory in search_affected_address_filter]
 
     return render_template("vault_report.html", affected_address=affected_address, form=form, affected_address_filter=affected_address_filter)
 
