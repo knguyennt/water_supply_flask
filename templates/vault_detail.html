@@ -8,27 +8,40 @@
             {{ form.hidden_tag() }}
             <div class="vstack gap-3">
                 <div>
+                    {{ form.vault_id.label(class="form_label") }}
+                    {{ form.vault_id() }}
+                </div>
+
+                <div>
+                    {{ form.vault_dma.label(class="form_label") }}
+                    {{ form.vault_dma() }}
+                </div>
+
+                <div>
                     {{ form.vault_size.label(class="form_label") }}
                     {{ form.vault_size() }}
+                </div>
+
+                <div>
+                    {{ form.vault_position.label(class="form_label") }}
+                    {{ form.vault_position() }}
                 </div>
 
                 <div>
                     {{ form.vault_total_round.label(class="form_label") }}
                     {{ form.vault_total_round() }}
                 </div>
-            </div>
 
-            <div class="vr"></div>
-
-            <div class="vstack gap-3">
                 <div>
                     {{ form.vault_current_round.label(class="form_label") }}
                     {{ form.vault_current_round() }}
                 </div>
+                
                 <div>
                     {{ form.vault_status.label(class="form_label") }}
                     {{ form.vault_status() }}
                 </div>
+
                 <div>
                     {{ form.vault_type.label(class="form_label") }}
                     {% for subfield in form.vault_type %}
@@ -38,10 +51,52 @@
                         </tr>
                     {% endfor %}
                 </div>
+                
+            </div>
+
+            <div class="vr"></div>
+
+            <div class="vstack gap-3">
                 <div>
                     {{ form.vault_position.label(class="form_label") }}
                     {{ form.vault_position() }}
                 </div>
+
+                <div>
+                    {{ form.vault_address.label(class="form_label") }}
+                    {{ form.vault_address() }}
+                </div>
+
+                <div>
+                    {{ form.vault_cooperate_team.label(class="form_label") }}
+                    {{ form.vault_cooperate_team() }}
+                </div>
+
+                <div>
+                    {{ form.vault_conductor.label(class="form_label") }}
+                    {{ form.vault_conductor() }}
+                </div>
+
+                <div>
+                    {{ form.vault_requirer.label(class="form_label") }}
+                    {{ form.vault_requirer() }}
+                </div>
+
+                <div>
+                    {{ form.vault_status.label(class="form_label") }}
+                    {{ form.vault_status() }}
+                </div>
+
+                <div>
+                    {{ form.vault_client.label(class="form_label") }}
+                    {{ form.vault_client() }}
+                </div>
+
+                <div>
+                    {{ form.vault_directory.label(class="form_label") }}
+                    {{ form.vault_directory() }}
+                </div>
+
             </div>
         </div>
         <div class="vault_detail_submit">

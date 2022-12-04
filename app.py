@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, EmailField, SubmitField, DateField, SelectField, RadioField
 from wtforms.validators import DataRequired
+from sqlalchemy import update
 
 
 app = Flask(__name__)
@@ -34,6 +35,8 @@ class VaultDetailModifyForm(FlaskForm):
     vault_type = RadioField("Chức năng hiện tại", choices=[('Biên','Biên'),('Bước','Bước'), ('Tổng', 'Tổng')])
     vault_position = SelectField("Vị trí van", choices=["Dưới Nhựa", "Trên Lề"])
     vault_address = StringField("Địa chỉ")
+    vault_client = StringField("Khách hàng")
+    vault_directory = StringField("Danh bạ")
     vault_cooperate_team = StringField("Đơn vị phối hợp")
     vault_conductor = StringField("Người thực hiện")
     vault_requirer = StringField("Người đề xuất")
@@ -101,7 +104,7 @@ class VaultDetail(db.Model):
     vault_current_round = db.Column(db.Integer) # Vòng van hiện tại
     vault_address = db.Column(db.String(50))
     vault_client = db.Column(db.String(20))
-    vault_directorhy = db.Column(db.String(20))
+    vault_directory = db.Column(db.String(20), primary_key=True)
     vault_cooperate_team = db.Column(db.String(20), db.ForeignKey("cooperate_team.team_name")) # Đơn vị phối hợp
     vault_conductor = db.Column(db.String(20), db.ForeignKey(Conductor.conductor)) # Người thực hiện
     vault_requirer = db.Column(db.String(20), db.ForeignKey(Requirer.requirer_name)) # người đề xuất
@@ -152,9 +155,10 @@ def vault_control():
 
 @app.route("/vault_detail/<string:vault_id>", methods=["GET", "POST"])
 def vault_detail(vault_id):
-
     vault_detail_form = VaultDetailModifyForm()
     vault_detail = VaultDetail.query.filter_by(vault_id=vault_id).first()
+    vault = VaultDetail.query.filter_by(vault_id=vault_id).all()
+
     if vault_detail_form.validate_on_submit():
         vault_detail.vault_id = vault_detail_form.vault_id.data
         vault_detail.vault_dma = vault_detail_form.vault_dma.data
@@ -167,23 +171,34 @@ def vault_detail(vault_id):
         vault_detail.vault_cooperate_team = vault_detail_form.vault_cooperate_team.data
         vault_detail.vault_conductor = vault_detail_form.vault_conductor.data
         vault_detail.vault_requirer = vault_detail_form.vault_requirer.data
-        vault_detail.vault_status = vault_detail_form.vault_status.data
+        if vault_detail_form.vault_current_round.data == 0:
+            for v in vault:
+                v.vault_status = "Đóng"
+        else:
+            for v in vault:
+                v.vault_status = "Mở"
+
+        vault_detail.vault_client  = vault_detail_form.vault_client.data
+        vault_detail.vault_directory = vault_detail_form.vault_directory.data
         db.session.commit()
 
     # add default value here
-    vault_detail_form.vault_id.default = vault_detail.vault_id
-    vault_detail_form.vault_dma.default = vault_detail.vault_dma
-    vault_detail_form.vault_size.default = vault_detail.vault_size
-    vault_detail_form.vault_type.default = vault_detail.vault_type
-    vault_detail_form.vault_position.default = vault_detail.vault_position
-    vault_detail_form.vault_total_round.default = vault_detail.vault_total_round
-    vault_detail_form.vault_current_round.default = vault_detail.vault_current_round
-    vault_detail_form.vault_address.default = vault_detail.vault_address
-    vault_detail_form.vault_cooperate_team.default = vault_detail.vault_cooperate_team
-    vault_detail_form.vault_conductor.default = vault_detail.vault_conductor
-    vault_detail_form.vault_requirer.default = vault_detail.vault_requirer
-    vault_detail_form.vault_status.default = vault_detail.vault_status
-    vault_detail_form.process()
+    else:
+        vault_detail_form.vault_id.default = vault_detail.vault_id
+        vault_detail_form.vault_dma.default = vault_detail.vault_dma
+        vault_detail_form.vault_size.default = vault_detail.vault_size
+        vault_detail_form.vault_type.default = vault_detail.vault_type
+        vault_detail_form.vault_position.default = vault_detail.vault_position
+        vault_detail_form.vault_total_round.default = vault_detail.vault_total_round
+        vault_detail_form.vault_current_round.default = vault_detail.vault_current_round
+        vault_detail_form.vault_address.default = vault_detail.vault_address
+        vault_detail_form.vault_cooperate_team.default = vault_detail.vault_cooperate_team
+        vault_detail_form.vault_conductor.default = vault_detail.vault_conductor
+        vault_detail_form.vault_requirer.default = vault_detail.vault_requirer
+        vault_detail_form.vault_status.default = vault_detail.vault_status
+        vault_detail_form.vault_client.default = vault_detail.vault_client
+        vault_detail_form.vault_directory.default = vault_detail.vault_directory
+        vault_detail_form.process()
     # end adding default value
     return render_template("vault_detail.html", vault_id=vault_id, form=vault_detail_form, vault_detail=vault_detail)
 
