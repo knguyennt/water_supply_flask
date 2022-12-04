@@ -214,7 +214,19 @@ def vault_report():
 
 @app.route("/dashboard", methods=["GET"])
 def dashboard():
-    return render_template("dashboard.html")
+    total_close_vault = VaultDetail.query.filter(VaultDetail.vault_status=="Đóng").group_by(VaultDetail.vault_id).count()
+    total_open_vault = VaultDetail.query.filter(VaultDetail.vault_status=="Mở").group_by(VaultDetail.vault_id).count()
+    total_close_address = VaultDetail.query.filter(VaultDetail.vault_status=="Đóng").group_by(VaultDetail.vault_address).count()
+    total_open_address = VaultDetail.query.filter(VaultDetail.vault_status=="Mở").group_by(VaultDetail.vault_address).count()
+    total_open_plt = VaultDetail.query.filter(VaultDetail.vault_status=="Mở", VaultDetail.vault_dma == "QBT_PLC").group_by(VaultDetail.vault_dma).count()
+    total_close_plt = VaultDetail.query.filter(VaultDetail.vault_status=="Đóng", VaultDetail.vault_dma == "QBT_PLC").group_by(VaultDetail.vault_dma).count()
+    total_open_ala = VaultDetail.query.filter(VaultDetail.vault_status=="Mở", VaultDetail.vault_dma == "QBT_ALA04").group_by(VaultDetail.vault_dma).count()
+    total_close_ala = VaultDetail.query.filter(VaultDetail.vault_status=="Đóng", VaultDetail.vault_dma == "QBT_ALA04").group_by(VaultDetail.vault_dma).count()
+
+    num_vault = [total_close_vault, total_open_vault, total_close_address, total_open_address, total_open_plt, total_close_plt, total_open_ala, total_close_ala]
+
+
+    return render_template("dashboard.html", num_vault=num_vault)
 
 @app.route('/test')
 def test_template():

@@ -14,10 +14,6 @@
 
         <div class="hr"></div>
 
-        <div>
-            <canvas id="bar_statistics_dma" style="width:100%;max-width:600px"></canvas>
-        </div>
-
     </div>
 
     
@@ -26,14 +22,11 @@
             <canvas id="affected_unaffected_chart" style="width:100%;max-width:600px"></canvas>
         </div>
 
-        <div class="hr"></div>
-        <div class="hr"></div>
-
-        <div>
-            <canvas id="bar_statistics_ward" style="width:100%;max-width:600px"></canvas>
-        </div>
-
     </div>
+</div>
+
+<div>
+    <canvas id="bar_statistics_dma" style="width:100%;max-width:600px;margin-left:auto;margin-right: auto;"></canvas>
 </div>
 
 
@@ -45,7 +38,7 @@
 
 <script>
     var open_close_chart_x = ["Đóng", "Mở"];
-    var open_close_chart_y = [100, 100];
+    var open_close_chart_y = ['{{ num_vault[0] }}', '{{ num_vault[1] }}'];
     var barColors = [
       "#b91d47",
       "#00aba9"
@@ -71,7 +64,7 @@
 
 <script>
     var affected_unaffected_chart_x = ["Bình thường", "Bị ảnh hưởng"];
-    var affected_unaffected_chart_y = [100, 100];
+    var affected_unaffected_chart_y = ['{{ num_vault[3] }}', '{{ num_vault[2] }}'];
     var barColors = [
       "#b91d47",
       "#00aba9"
@@ -99,57 +92,22 @@
     var ctx = document.getElementById("bar_statistics_dma").getContext("2d");
 
     var data = {
-        labels: ["ALA04", "PLT"],
+        labels: ["PLT", "ALA04"],
         datasets: [
             {
                 label: "Mở",
                 backgroundColor: "blue",
-                data: [3,7]
+                data: ['{{ num_vault[4] }}','{{ num_vault[6] }}']
             },
             {
                 label: "Đóng",
                 backgroundColor: "red",
-                data: [4,3]
+                data: ['{{ num_vault[5] }}','{{ num_vault[7] }}']
             }
         ]
     };
 
     var bar_statistics_dma = new Chart(ctx, {
-        type: 'bar',
-        data: data,
-        options: {
-            barValueSpacing: 20,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        min: 0,
-                    }
-                }]
-            }
-        }
-    });
-</script>
-
-<script>
-    var ctx = document.getElementById("bar_statistics_ward").getContext("2d");
-
-    var data = {
-        labels: ["An Lạc", "An Lạc A"],
-        datasets: [
-            {
-                label: "Mở",
-                backgroundColor: "blue",
-                data: [3,7]
-            },
-            {
-                label: "Đóng",
-                backgroundColor: "red",
-                data: [4,3]
-            }
-        ]
-    };
-
-    var bar_statistics_ward = new Chart(ctx, {
         type: 'bar',
         data: data,
         options: {
