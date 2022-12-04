@@ -90,10 +90,6 @@ class Conductor(db.Model):
 class Requirer(db.Model):
     requirer_name = db.Column(db.String(50), primary_key=True)
 
-# class affected_address(db.Model):
-#     vault_address = db.Column(db.String(50), primary_key=True)
-#     vault_id = db.Column(db.String(20))
-
 class VaultDetail(db.Model):
     vault_id = db.Column(db.String(20), primary_key=True)
     vault_dma = db.Column(db.String(20), db.ForeignKey(VaultDMA.vault_dma))
@@ -216,9 +212,9 @@ def vault_report():
 
     return render_template("vault_report.html", affected_address=affected_address, form=form, affected_address_filter=affected_address_filter)
 
-@app.route("/signin", methods=[])
-def signin():
-    pass
+@app.route("/dashboard", methods=["GET"])
+def dashboard():
+    return render_template("dashboard.html")
 
 @app.route('/test')
 def test_template():

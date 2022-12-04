@@ -1,5 +1,168 @@
-{% extends base.html %}
+{% extends 'base.html' %}
 
 {% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<h1>Dashboard</h1>
+
+<div class="hstack gap-0">
+
+    <div class="vstack gap-5">
+        <div>
+            <canvas id="open_close_chart" style="width:100%;max-width:600px"></canvas>
+        </div>
+
+        <div class="hr"></div>
+
+        <div>
+            <canvas id="bar_statistics_dma" style="width:100%;max-width:600px"></canvas>
+        </div>
+
+    </div>
+
+    
+    <div class="vstack gap-5">
+        <div>
+            <canvas id="affected_unaffected_chart" style="width:100%;max-width:600px"></canvas>
+        </div>
+
+        <div class="hr"></div>
+        <div class="hr"></div>
+
+        <div>
+            <canvas id="bar_statistics_ward" style="width:100%;max-width:600px"></canvas>
+        </div>
+
+    </div>
+</div>
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/vault_detail.css') }}">
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+<script>
+    var open_close_chart_x = ["Đóng", "Mở"];
+    var open_close_chart_y = [100, 100];
+    var barColors = [
+      "#b91d47",
+      "#00aba9"
+    ];
+    
+    new Chart("open_close_chart", {
+      type: "pie",
+      data: {
+        labels: open_close_chart_x,
+        datasets: [{
+          backgroundColor: barColors,
+          data: open_close_chart_y
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Tỉ lệ van đóng/mở"
+        }
+      }
+    });
+</script>
+
+<script>
+    var affected_unaffected_chart_x = ["Bình thường", "Bị ảnh hưởng"];
+    var affected_unaffected_chart_y = [100, 100];
+    var barColors = [
+      "#b91d47",
+      "#00aba9"
+    ];
+    
+    new Chart("affected_unaffected_chart", {
+      type: "pie",
+      data: {
+        labels: affected_unaffected_chart_x,
+        datasets: [{
+          backgroundColor: barColors,
+          data: affected_unaffected_chart_y
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Tỉ lệ danh bạ bị ảnh hưởng"
+        }
+      }
+    });
+</script>
+
+<script>
+    var ctx = document.getElementById("bar_statistics_dma").getContext("2d");
+
+    var data = {
+        labels: ["ALA04", "PLT"],
+        datasets: [
+            {
+                label: "Mở",
+                backgroundColor: "blue",
+                data: [3,7]
+            },
+            {
+                label: "Đóng",
+                backgroundColor: "red",
+                data: [4,3]
+            }
+        ]
+    };
+
+    var bar_statistics_dma = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            barValueSpacing: 20,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+<script>
+    var ctx = document.getElementById("bar_statistics_ward").getContext("2d");
+
+    var data = {
+        labels: ["An Lạc", "An Lạc A"],
+        datasets: [
+            {
+                label: "Mở",
+                backgroundColor: "blue",
+                data: [3,7]
+            },
+            {
+                label: "Đóng",
+                backgroundColor: "red",
+                data: [4,3]
+            }
+        ]
+    };
+
+    var bar_statistics_ward = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            barValueSpacing: 20,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                    }
+                }]
+            }
+        }
+    });
+</script>
 
 {% endblock %}
