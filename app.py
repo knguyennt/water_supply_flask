@@ -34,7 +34,7 @@ class VaultDetailModifyForm(FlaskForm):
     vault_status = SelectField("Trạng thái", choices=["Đóng", "Mở"])
     vault_type = RadioField("Chức năng hiện tại", choices=[('Biên','Biên'),('Bước','Bước'), ('Tổng', 'Tổng')])
     vault_position = SelectField("Vị trí van", choices=["Dưới Nhựa", "Trên Lề"])
-    vault_address = StringField("Địa chỉ")
+    vault_address = StringField("Địa chỉ khách hàng")
     vault_client = StringField("Khách hàng")
     vault_directory = StringField("Danh bạ")
     vault_cooperate_team = SelectField("Đơn vị phối hợp", choices=["Đội QLMLCN1", "Đội QLMLCN2"])
