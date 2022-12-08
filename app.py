@@ -28,7 +28,7 @@ class VaultForm(FlaskForm):
 class VaultDetailModifyForm(FlaskForm):
     vault_id = StringField("Mã Van")
     vault_size = IntegerField("Cỡ Van")
-    vault_dma = StringField("DMA")
+    vault_dma =  SelectField("DMA", choices=["QBT_PLC", "QBT_AL04"])
     vault_total_round = IntegerField("Tổng số vòng")
     vault_current_round = IntegerField("Vòng mở")
     vault_status = SelectField("Trạng thái", choices=["Đóng", "Mở"])
@@ -37,9 +37,9 @@ class VaultDetailModifyForm(FlaskForm):
     vault_address = StringField("Địa chỉ")
     vault_client = StringField("Khách hàng")
     vault_directory = StringField("Danh bạ")
-    vault_cooperate_team = StringField("Đơn vị phối hợp")
-    vault_conductor = StringField("Người thực hiện")
-    vault_requirer = StringField("Người đề xuất")
+    vault_cooperate_team = SelectField("Đơn vị phối hợp", choices=["Đội QLMLCN1", "Đội QLMLCN2"])
+    vault_conductor = SelectField("Người thực hiện", choices=["Caretaker 1", "Caretaker 2", "Caretaker 3"])
+    vault_requirer = SelectField("Người đề xuất", choices=["Nguyễn Văn Trung", "Đoàn Hải Minh Hà", "Trần Hữu Tế Nhị"])
     update_button = SubmitField("Update")
 
 
