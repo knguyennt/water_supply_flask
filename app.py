@@ -174,8 +174,8 @@ def vault_detail(vault_id):
             for v in vault:
                 v.vault_status = "Mở"
 
-        vault_detail.vault_client  = vault_detail_form.vault_client.data
-        vault_detail.vault_directory = vault_detail_form.vault_directory.data
+        # vault_detail.vault_client  = vault_detail_form.vault_client.data
+        # vault_detail.vault_directory = vault_detail_form.vault_directory.data
         db.session.commit()
 
     # add default value here
