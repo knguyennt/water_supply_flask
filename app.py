@@ -163,7 +163,7 @@ def vault_detail(vault_id):
         vault_detail.vault_position = vault_detail_form.vault_position.data
         vault_detail.vault_total_round = vault_detail_form.vault_total_round.data
         vault_detail.vault_current_round = vault_detail_form.vault_current_round.data
-        vault_detail.vault_address = vault_detail_form.vault_address.data
+        # vault_detail.vault_address = vault_detail_form.vault_address.data
         vault_detail.vault_cooperate_team = vault_detail_form.vault_cooperate_team.data
         vault_detail.vault_conductor = vault_detail_form.vault_conductor.data
         vault_detail.vault_requirer = vault_detail_form.vault_requirer.data
