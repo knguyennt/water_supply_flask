@@ -2,7 +2,6 @@
 
 {% block content %}
     <h1>Mã Van : {{ vault_detail.vault_id }}</h1>
-    <h2>{{ vault_detail.vault_address }}</h2>
     <form method="post">
         <div class="hstack gap-2">
             {{ form.hidden_tag() }}
@@ -60,11 +59,6 @@
                 <div>
                     {{ form.vault_position.label(class="form_label") }}
                     {{ form.vault_position() }}
-                </div>
-
-                <div>
-                    {{ form.vault_address.label(class="form_label") }}
-                    {{ form.vault_address() }}
                 </div>
 
                 <div>
