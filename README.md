@@ -42,7 +42,7 @@ It has the basic building block that enable user to start getting started.
 
 Flask follow the MVT model
 
-![Alt text][images/MVT.png "MVT model"]
+[![Alt text][[images/MVT.png](https://github.com/knguyennt/water_supply_flask/blob/main/images/MVT.png) "MVT model"]]
 
 |Components| Description|
 |----------|------------|
