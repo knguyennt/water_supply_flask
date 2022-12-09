@@ -42,7 +42,7 @@ It has the basic building block that enable user to start getting started.
 
 Flask follow the MVT model
 
-![MVT model][images/MVT.png]
+![Alt text][images/MVT.png "MVT model"]
 
 |Components| Description|
 |----------|------------|
